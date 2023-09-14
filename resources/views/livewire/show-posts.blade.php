@@ -15,8 +15,12 @@
 
 
     <div class="relative overflow-x-auto">
-        @component('components.posts.search-input') @endcomponent
-        {{-- <x-posts.search-input /> --}} {{-- ↑↓ --}}
+        <div class="grid grid-cols-12 gap-4 items-center justify-items-end">
+            @component('components.posts.search-input') @endcomponent
+            {{-- <x-posts.search-input /> --}} {{-- ↑↓ --}}
+            
+            @livewire('create-post')
+        </div>
 
         <div class="relative">
             @if ($posts->count())
