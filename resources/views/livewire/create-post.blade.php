@@ -1,4 +1,4 @@
-<div x-data="{ open : @entangle('isOpen'), openToast : @entangle('isOpenToast') }" {{-- @entangle se sincroniza con la variable isOpen de livewire en CreatePost --}}
+<div x-data="{ open : @entangle('isOpenModal'), openToast : @entangle('isOpenToast') }" {{-- @entangle se sincroniza con la variable isOpen de livewire en CreatePost --}}
     class="col-span-12 sm:col-span-4">
     <button type="button" @click="open = true"
         class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
@@ -46,9 +46,21 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="mb-4">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Imagen</label>
+                                <input wire:model="image" required
+                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or WEBP</p>
+                                @error('image')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            @if ($image)
+                                <img src="{{ $image->temporaryUrl() }}" alt="">
+                            @endif
 
-                            <button type="submit" wire:loading.attr="disabled"
-                                class="disabled:opacity-50 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <button type="submit" wire:loading.attr="disabled" wire:target="save"
+                                class="disabled:opacity-50 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Crear Post
                             </button>
                         </form>

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Post;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +22,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'sam@example.com',
         ]);
 
-        Post::factory(100)->create();
+        // Crear una carpeta
+        Storage::deleteDirectory('public/posts');
+        Storage::makeDirectory('public/posts');
+
+        Post::factory(10)->create();
     }
 }

@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use App\Models\Post;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CreatePost extends Component
 {
-    public $title, $content;
-    public $isOpen = false;
+    use WithFileUploads;
+
+    public $title, $content, $image;
+    public $isOpenModal = false;
     public $isOpenToast = false;
 
     public function render()
@@ -19,14 +22,16 @@ class CreatePost extends Component
     public function store(): void
     {
         $this->validate([
-            'title' => 'required|min:3|max:100',
-            'content' => 'required|min:3|max:256',
+            'title'     => 'required|min:3|max:100',
+            'content'   => 'required|min:3|max:256',
+            'image'     => 'required|image|max:2048',
         ]);
 
         Post::create([
-            'title' => $this->title,
-            'content' => $this->content,
-            'user_id' => auth()->id(),
+            'title'     => $this->title,
+            'content'   => $this->content,
+            'image'     => 'https://picsum.photos/600/480',
+            'user_id'   => auth()->id(),
         ]);
 
         $this->clearForm();
@@ -36,6 +41,6 @@ class CreatePost extends Component
 
     public function clearForm(): void
     {
-        $this->reset(['title', 'content', 'isOpen']);
+        $this->reset(['title', 'content', 'image', 'isOpenModal']);
     }
 }
