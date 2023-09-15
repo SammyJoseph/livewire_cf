@@ -8,7 +8,7 @@
     <!-- Create post - Modal -->
     <div x-show="open" x-cloak
         class="fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-gray-800 bg-opacity-50 z-50">
-        <form tabindex="-1" aria-hidden="true" @click.away="open = false" wire:submit="store"
+        <form tabindex="-1" aria-hidden="true" @click.outside="open = false" wire:submit="store"
             class="w-full p-4 overflow-x-hidden overflow-y-auto max-w-md bg-white shadow-lg rounded-lg">
             <div class="relative w-full max-w-md max-h-full">
                 <!-- Modal content -->

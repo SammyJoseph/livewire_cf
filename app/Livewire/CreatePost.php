@@ -36,6 +36,6 @@ class CreatePost extends Component
 
     public function clearForm(): void
     {
-        $this->reset(['title', 'content', 'isOpen', 'isOpenToast']);
+        $this->reset(['title', 'content', 'isOpen']);
     }
 }
