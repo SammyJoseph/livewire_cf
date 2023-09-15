@@ -7,6 +7,8 @@ use Livewire\Component;
 
 class ShowPosts extends Component
 {
+    protected $listeners = ['postCreated' => 'render']; // evento enviado desde CreatePost
+
     public $mensaje1, $mensaje2, $mensaje3;
     public $nombre;
     public $search;

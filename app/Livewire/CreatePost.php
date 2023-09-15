@@ -8,6 +8,7 @@ use Livewire\Component;
 class CreatePost extends Component
 {
     public $title, $content;
+    public $isOpen = false;
 
     public function render()
     {
@@ -21,5 +22,13 @@ class CreatePost extends Component
             'content' => $this->content,
             'user_id' => auth()->id(),
         ]);
+
+        $this->clearForm();
+        $this->dispatch('postCreated'); // evento escuchado desde ShowPosts
+    }
+
+    public function clearForm(): void
+    {
+        $this->reset(['title', 'content', 'isOpen']);
     }
 }
