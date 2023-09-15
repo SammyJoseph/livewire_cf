@@ -9,6 +9,7 @@ class CreatePost extends Component
 {
     public $title, $content;
     public $isOpen = false;
+    public $isOpenToast = false;
 
     public function render()
     {
@@ -17,6 +18,11 @@ class CreatePost extends Component
 
     public function store(): void
     {
+        $this->validate([
+            'title' => 'required|min:3|max:100',
+            'content' => 'required|min:3|max:256',
+        ]);
+
         Post::create([
             'title' => $this->title,
             'content' => $this->content,
@@ -25,6 +31,7 @@ class CreatePost extends Component
 
         $this->clearForm();
         $this->dispatch('postCreated'); // evento escuchado desde ShowPosts
+        $this->isOpenToast = true;
     }
 
     public function clearForm(): void
