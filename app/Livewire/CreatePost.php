@@ -27,10 +27,13 @@ class CreatePost extends Component
             'image'     => 'required|image|max:2048',
         ]);
 
+        $img = $this->image->store('public/posts'); // guarda la imagen en la carpeta
+        $img = str_replace('public/', '', $img); // después de guardar, quitar el prefijo public/
+
         Post::create([
             'title'     => $this->title,
             'content'   => $this->content,
-            'image'     => 'https://picsum.photos/600/480',
+            'image'     => $img,
             'user_id'   => auth()->id(),
         ]);
 
@@ -42,5 +45,6 @@ class CreatePost extends Component
     public function clearForm(): void
     {
         $this->reset(['title', 'content', 'image', 'isOpenModal']);
+        $this->dispatch('resetFileInput'); // resetea el nombre de archivo seleccionada anteriormente
     }
 }
