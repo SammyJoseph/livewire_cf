@@ -33,8 +33,12 @@ class ShowPosts extends Component
                         ->orderBy($this->sort, $this->dir)         
                         ->paginate(10);
 
-        return view('livewire.show-posts', compact('posts'));
-            
+        return view('livewire.show-posts', compact('posts'));            
+    }
+
+    public function updatingSearch() // se ejecuta cada que la propiedad search cambia
+    {
+        $this->resetPage(); // resetea la paginación para que la búsqueda se haga en todos los registros
     }
 
     public function sortTable($col)
