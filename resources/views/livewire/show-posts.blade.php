@@ -6,6 +6,7 @@
             @livewire('create-post')
         </div>
 
+        {{-- Tabla de posts --}}
         <div class="relative">
             @if ($posts->count())
                 <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100 mt-4">
@@ -144,6 +145,12 @@
                 </table>
             @else
                 <div class="text-xs text-white uppercase bg-blue-600 mt-4 p-4">No se encontraron resultados</div>
+            @endif
+
+            @if ($posts->hasPages())
+                <div class="px-6 py-3">
+                    {{ $posts->links() }}
+                </div>
             @endif
         </div>
     </div>

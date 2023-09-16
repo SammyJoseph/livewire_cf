@@ -26,6 +26,6 @@ class DatabaseSeeder extends Seeder
         Storage::deleteDirectory('posts');
         Storage::makeDirectory('posts');
 
-        Post::factory(20)->create();
+        Post::factory(100)->create();
     }
 }

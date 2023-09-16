@@ -6,11 +6,12 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 use Illuminate\Support\Str;
 
 class ShowPosts extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     protected $listeners = [ // eventos enviados desde CreatePost & EditPost
         'postCreated'       => 'render',
@@ -22,8 +23,6 @@ class ShowPosts extends Component
     public $openEditModal = false, $openDeleteModal = false, $title, $content, $image;
     public $epost, $dpost; // $epost = parámetro Post enviado al editar un post
     public $isOpenEditToast = false, $isOpenDeleteToast = false;
-    public $mensaje1, $mensaje2, $mensaje3;
-    public $nombre;
     public $search;
     public $sort = 'id', $dir = 'asc';
 
@@ -32,23 +31,11 @@ class ShowPosts extends Component
         $posts = Post::where('title', 'like', '%' . $this->search . '%')
                         ->orWhere('content', 'like', '%' . $this->search . '%')
                         ->orderBy($this->sort, $this->dir)         
-                        ->get();
+                        ->paginate(10);
 
         return view('livewire.show-posts', compact('posts'));
-        // return view('livewire.show-posts')->layout('layouts.app'); // se puede especificar el layout cuando se usa livewire como controlador
             
     }
-
-    /* public function mount($mensaje1 = 'null')
-    {
-        $this->mensaje3 = $mensaje1;
-    } */
-
-    // mount() recibe el parámetro $name desde la ruta y lo guarda en una propiedad de livewire
-    /* public function mount($name = null)
-    {
-        $this->nombre = $name;
-    } */
 
     public function sortTable($col)
     {
