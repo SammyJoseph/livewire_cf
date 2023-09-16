@@ -14,7 +14,7 @@ class EditPost extends Component
     public $post; // esta variable se envía desde @livewire('edit-post', ['post' => $post]) en show-posts.blade
 
     public $title, $content, $image;
-    public $isOpenModal = false;
+    public $isOpenModal = false, $isOpenDeleteModal = false;
 
     public function render()
     {
@@ -33,13 +33,17 @@ class EditPost extends Component
         $this->validate([
             'title'     => 'required|min:3|max:100',
             'content'   => 'required|min:3|max:256',
-            'image'     => 'required|image|max:2048',
         ]);
 
-        if ($this->image){
+        if ($this->image){ // si se selecciona una imagen en el formulario
+            $this->validate([
+                'image'     => 'image|max:2048',
+            ]);
             Storage::delete([$this->post->image]); // elimina la imagen de la carpeta
+            $img = $this->image->store('posts'); // guarda la imagen en la carpeta
+        } else{
+            $img = $this->post->image; // si no se selecciona una imagen, se mantiene la imagen anterior
         }
-        $img = $this->image->store('posts'); // guarda la imagen en la carpeta
 
         $this->post->update([
             'title'     => $this->title,
@@ -50,5 +54,16 @@ class EditPost extends Component
         $this->dispatch('postUpdated');
         $this->dispatch('show-edit-toast'); // este evento lo recibe ShowPosts
         $this->reset(['isOpenModal', 'image']);
+    }
+
+    function destroy()
+    {
+        $post = Post::find($this->post->id); // encuentra al post
+        Storage::delete([$post->image]); // elimina la imagen de la carpeta
+        $post->delete();
+        
+        $this->dispatch('postUpdated');
+        $this->dispatch('show-delete-toast');
+        $this->reset(['isOpenDeleteModal']);
     }
 }

@@ -8,12 +8,13 @@ use Livewire\Component;
 class ShowPosts extends Component
 {
     protected $listeners = [ // eventos enviados desde CreatePost & EditPost
-        'postCreated' => 'render',
-        'postUpdated' => 'render',
-        'show-edit-toast' => 'showEditToast', // llama al método showEditToast
+        'postCreated'       => 'render',
+        'postUpdated'       => 'render',
+        'show-edit-toast'   => 'showEditToast', // llama al método showEditToast
+        'show-delete-toast' => 'showDeleteToast',
     ];
 
-    public $isOpenEditToast = false;
+    public $isOpenEditToast = false, $isOpenDeleteToast = false;
     public $mensaje1, $mensaje2, $mensaje3;
     public $nombre;
     public $search;
@@ -60,5 +61,10 @@ class ShowPosts extends Component
     public function showEditToast()
     {
         $this->isOpenEditToast = true; // mostrar tostada "se actualizó con éxito"
+    }
+
+    public function showDeleteToast()
+    {
+        $this->isOpenDeleteToast = true;
     }
 }

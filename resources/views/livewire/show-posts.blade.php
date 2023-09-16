@@ -1,4 +1,4 @@
-<div x-data="{ openToastEdit : @entangle('isOpenEditToast') }">
+<div x-data="{ openToastEdit : @entangle('isOpenEditToast'), openToastDelete : @entangle('isOpenDeleteToast') }">
     {{-- <p>{{ $mensaje1 }}</p>
     <p>{{ $mensaje2 }}</p>
     <p>{{ $mensaje3 }}</p>
@@ -100,13 +100,16 @@
                                 </svg>
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Imagen
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Acciones
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($posts as $post)
-                            <tr class="bg-blue-500 border-b border-blue-400" wire:key="{{ $post->id }}"> {{-- wire:key ayuda en la reordenación del datatable --}}
+                            <tr class="bg-blue-500 border-b border-blue-400" wire:key="{{ $post->id }}"> {{-- wire:key ayuda al reordenar el datatable --}}
                                 <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
                                     {{ $post->id }}
                                 </th>
@@ -116,8 +119,19 @@
                                 <td class="px-6 py-4">
                                     {{ $post->content }}
                                 </td>
+                                <td class="px-6 h-40">
+                                    <img class="object-contain max-h-full" src="{{ Storage::url($post->image) }}" alt="">
+                                </td>
                                 <td class="px-6 py-4">
-                                    @livewire('edit-post', ['post' => $post], key($post->id)) {{-- key ayuda al renderizar la primera vez --}}
+                                    {{-- @livewire('edit-post', ['post' => $post], key($post->id)) --}} {{-- key ayuda al renderizar la primera vez --}}
+                                    <a href="{{ $post->id }}" @click.prevent="open = true"
+                                        class="font-medium text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil w-5 inline-block" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                            <path d="M13.5 6.5l4 4" />
+                                        </svg>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -137,7 +151,7 @@
         </div>
     </div>
 
-    <!-- Edit toast -->
+    <!-- Post edited - Toast -->
     <div class="fixed top-32 left-1/2 transform -translate-x-1/2 z-20" x-show="openToastEdit" x-cloak>
         <div id="toastedit-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
             <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
@@ -148,6 +162,25 @@
             </div>
             <div class="ml-3 text-sm font-normal">Se actualizó con éxito.</div>
             <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toastedit-success" aria-label="Close">
+                <span class="sr-only">Close</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Post deleted - Toast -->
+    <div class="fixed top-32 left-1/2 transform -translate-x-1/2 z-20" x-show="openToastDelete" x-cloak>
+        <div id="toastdelete-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+            <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                </svg>
+                <span class="sr-only">Check icon</span>
+            </div>
+            <div class="ml-3 text-sm font-normal">El post se eliminó.</div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toastdelete-success" aria-label="Close">
                 <span class="sr-only">Close</span>
                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
