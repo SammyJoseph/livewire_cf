@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Crear una carpeta
-        Storage::deleteDirectory('public/posts');
-        Storage::makeDirectory('public/posts');
+        Storage::deleteDirectory('posts');
+        Storage::makeDirectory('posts');
 
         Post::factory(10)->create();
     }

@@ -7,8 +7,13 @@ use Livewire\Component;
 
 class ShowPosts extends Component
 {
-    protected $listeners = ['postCreated' => 'render']; // evento enviado desde CreatePost
+    protected $listeners = [ // eventos enviados desde CreatePost & EditPost
+        'postCreated' => 'render',
+        'postUpdated' => 'render',
+        'show-edit-toast' => 'showEditToast', // llama al método showEditToast
+    ];
 
+    public $isOpenEditToast = false;
     public $mensaje1, $mensaje2, $mensaje3;
     public $nombre;
     public $search;
@@ -50,5 +55,10 @@ class ShowPosts extends Component
         }
 
         $this->sort = $col; // ordenar por ésta columna
+    }
+
+    public function showEditToast()
+    {
+        $this->isOpenEditToast = true; // mostrar tostada "se actualizó con éxito"
     }
 }

@@ -27,8 +27,7 @@ class CreatePost extends Component
             'image'     => 'required|image|max:2048',
         ]);
 
-        $img = $this->image->store('public/posts'); // guarda la imagen en la carpeta
-        $img = str_replace('public/', '', $img); // después de guardar, quitar el prefijo public/
+        $img = $this->image->store('posts'); // guarda la imagen en la carpeta
 
         Post::create([
             'title'     => $this->title,
