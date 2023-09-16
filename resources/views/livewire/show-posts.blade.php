@@ -106,7 +106,7 @@
                     </thead>
                     <tbody>
                         @foreach ($posts as $post)
-                            <tr class="bg-blue-500 border-b border-blue-400">
+                            <tr class="bg-blue-500 border-b border-blue-400" wire:key="{{ $post->id }}"> {{-- wire:key ayuda en la reordenación del datatable --}}
                                 <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
                                     {{ $post->id }}
                                 </th>
@@ -117,7 +117,7 @@
                                     {{ $post->content }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    @livewire('edit-post', ['post' => $post], key($post->id))
+                                    @livewire('edit-post', ['post' => $post], key($post->id)) {{-- key ayuda al renderizar la primera vez --}}
                                 </td>
                             </tr>
                         @endforeach
