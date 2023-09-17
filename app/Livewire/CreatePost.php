@@ -44,6 +44,6 @@ class CreatePost extends Component
     public function clearForm(): void
     {
         $this->reset(['title', 'content', 'image', 'isOpenModal']);
-        $this->dispatch('resetFileInput'); // resetea el nombre de archivo seleccionada anteriormente
+        $this->dispatch('resetFileInput'); // resetea el nombre de archivo seleccionado anteriormente (se escucha desde la vista con js)
     }
 }

@@ -57,6 +57,16 @@
                                 @error('image')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
+                                <script>
+                                    // Escuchar el evento livewire resetFileInput desde CreatePost
+                                    // para limpiar el nombre del archivo seleccionado en el input image
+                                    document.addEventListener('livewire:initialized', () => {
+                                        @this.on('resetFileInput', (event) => {
+                                            const fileInput = document.querySelector('#postImage-input');
+                                            fileInput.value = '';
+                                        });
+                                    });
+                                </script>
                             </div>
                             <div> {{-- Vista previa de imagen --}}
                                 @if ($image)
@@ -72,17 +82,7 @@
                                     <div>
                                       <span class="font-medium">Cargando imagen.</span> Espere unos segundos.
                                     </div>
-                                </div>
-                                <script>
-                                    // Escuchar el evento livewire resetFileInput desde CreatePost
-                                    // para limpiar el nombre del archivo seleccionado en el input image
-                                    document.addEventListener('livewire:initialized', () => {
-                                        @this.on('resetFileInput', (event) => {
-                                            const fileInput = document.querySelector('#postImage-input');
-                                            fileInput.value = '';
-                                        });
-                                    });
-                                </script>
+                                </div>                                
                             </div>
 
                             <button type="submit" wire:loading.attr="disabled" wire:target="save, image"
