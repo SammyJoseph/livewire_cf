@@ -23,15 +23,28 @@ class ShowPosts extends Component
     public $openEditModal = false, $openDeleteModal = false, $title, $content, $image;
     public $epost, $dpost; // $epost = parámetro Post enviado al editar un post
     public $isOpenEditToast = false, $isOpenDeleteToast = false;
-    public $search;
+    public $search = '';
+    public $perPage = '10'; // el 10 como cadena para que funcione el except del queryString
     public $sort = 'id', $dir = 'asc';
+
+    protected $queryString = [ // definir propiedades que viajan en la URL
+        'perPage'   => ['except' => '10'], // las excepciones (valores por defecto) no se tomarán en cuenta
+        'sort'      => ['except' => 'id'],
+        'dir'       => ['except' => 'asc'],
+        'search'    => ['except' => ''],
+    ];
 
     public function render()
     {
-        $posts = Post::where('title', 'like', '%' . $this->search . '%')
+        $postsQuery = Post::where('title', 'like', '%' . $this->search . '%')
                         ->orWhere('content', 'like', '%' . $this->search . '%')
-                        ->orderBy($this->sort, $this->dir)         
-                        ->paginate(10);
+                        ->orderBy($this->sort, $this->dir);   
+                        
+        if ($this->perPage != -1) { // si se selecciona una paginación
+            $posts = $postsQuery->paginate($this->perPage);
+        } else { // si se elige mostrar todos los registros           
+            $posts = $postsQuery->get();
+        }
 
         return view('livewire.show-posts', compact('posts'));            
     }

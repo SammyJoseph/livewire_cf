@@ -1,9 +1,25 @@
 <div x-data="{ openToastEdit : @entangle('isOpenEditToast'), openToastDelete : @entangle('isOpenDeleteToast') }">
     <div class="relative overflow-x-auto">
-        <div class="grid grid-cols-12 gap-4 items-center justify-items-end">
+        <div class="grid grid-cols-12 gap-4 items-center justify-items-end pt-1">
+
+            {{-- Barra de búsqueda --}}
             @component('components.posts.search-input') @endcomponent
+
+            {{-- Cantidad de productos --}}
+            <div class="col-span-6 sm:col-span-2">
+                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white sr-only">Select an option</label>
+                <select wire:model.live="perPage"
+                    id="countries" class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="-1">Todos</option>
+                </select>
+            </div>
             
+            {{-- Botón & modal crear post --}}
             @livewire('create-post')
+
         </div>
 
         {{-- Tabla de posts --}}
@@ -147,7 +163,7 @@
                 <div class="text-xs text-white uppercase bg-blue-600 mt-4 p-4">No se encontraron resultados</div>
             @endif
 
-            @if ($posts->hasPages())
+            @if (method_exists($posts, 'hasPages') && $posts->hasPages())
                 <div class="px-6 py-3">
                     {{ $posts->links() }}
                 </div>
