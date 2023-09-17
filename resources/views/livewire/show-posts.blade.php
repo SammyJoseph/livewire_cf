@@ -1,4 +1,4 @@
-<div x-data="{ openToastEdit : @entangle('isOpenEditToast'), openToastDelete : @entangle('isOpenDeleteToast') }">
+<div wire:init="loadPosts" x-data="{ openToastEdit : @entangle('isOpenEditToast'), openToastDelete : @entangle('isOpenDeleteToast') }">
     <div class="relative overflow-x-auto">
         <div class="grid grid-cols-12 gap-4 items-center justify-items-end pt-1">
 
@@ -24,7 +24,7 @@
 
         {{-- Tabla de posts --}}
         <div class="relative">
-            @if ($posts->count())
+            @if (count($posts))
                 <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100 mt-4">
                     <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
                         <tr x-data="{ id_asc: true, id_desc: false, ti_asc: false, ti_desc: false, co_asc: false, co_desc: false }">
@@ -159,15 +159,59 @@
                         </div>
                     </tbody>
                 </table>
-            @else
-                <div class="text-xs text-white uppercase bg-blue-600 mt-4 p-4">No se encontraron resultados</div>
-            @endif
 
-            @if (method_exists($posts, 'hasPages') && $posts->hasPages())
-                <div class="px-6 py-3">
-                    {{ $posts->links() }}
+                @if (method_exists($posts, 'hasPages') && $posts->hasPages())
+                    <div class="px-6 py-3">
+                        {{ $posts->links() }}
+                    </div>
+                @endif
+            @else
+                {{-- <div class="text-xs text-white uppercase bg-blue-600 mt-4 p-4">No se encontraron resultados</div> --}}      
+                
+                {{-- lazy load table --}}
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100 mt-4">
+                        <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    ID
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Título
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Contenido
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Imagen
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Acciones
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-blue-500 border-b border-blue-400">
+                                <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
+                                    Cargando
+                                </th>
+                                <td class="px-6 py-4">
+                                    Cargando...
+                                </td>
+                                <td class="px-6 py-4">
+                                    Cargando...
+                                </td>
+                                <td class="px-6 py-4 h-24">
+                                    <img class="object-contain max-h-full" src="{{ asset('posts/images/lazy-img.png') }}" alt="">
+                                </td>
+                                <td class="px-6 py-4">
+                                    Cargando...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            @endif
+            @endif            
         </div>
     </div>
 

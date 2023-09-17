@@ -15,9 +15,6 @@ class ShowPosts extends Component
 
     protected $listeners = [ // eventos enviados desde CreatePost & EditPost
         'postCreated'       => 'render',
-        'postUpdated'       => 'render',
-        'show-edit-toast'   => 'showEditToast', // llama al método showEditToast
-        'show-delete-toast' => 'showDeleteToast',
     ];
 
     public $openEditModal = false, $openDeleteModal = false, $title, $content, $image;
@@ -26,6 +23,7 @@ class ShowPosts extends Component
     public $search = '';
     public $perPage = '10'; // el 10 como cadena para que funcione el except del queryString
     public $sort = 'id', $dir = 'asc';
+    public $readyToLoad = false; // por defecto, no cargar los registros de la bd
 
     protected $queryString = [ // definir propiedades que viajan en la URL
         'perPage'   => ['except' => '10'], // las excepciones (valores por defecto) no se tomarán en cuenta
@@ -36,17 +34,26 @@ class ShowPosts extends Component
 
     public function render()
     {
-        $postsQuery = Post::where('title', 'like', '%' . $this->search . '%')
+        if ($this->readyToLoad) {
+            $postsQuery = Post::where('title', 'like', '%' . $this->search . '%')
                         ->orWhere('content', 'like', '%' . $this->search . '%')
                         ->orderBy($this->sort, $this->dir);   
                         
-        if ($this->perPage != -1) { // si se selecciona una paginación
-            $posts = $postsQuery->paginate($this->perPage);
-        } else { // si se elige mostrar todos los registros           
-            $posts = $postsQuery->get();
+            if ($this->perPage != -1) { // si se selecciona una paginación
+                $posts = $postsQuery->paginate($this->perPage);
+            } else { // si se elige mostrar todos los registros           
+                $posts = $postsQuery->get();
+            }
+        } else {
+            $posts = [];
         }
-
+        
         return view('livewire.show-posts', compact('posts'));            
+    }
+
+    public function loadPosts()
+    {
+        $this->readyToLoad = true;
     }
 
     public function updatingSearch() // se ejecuta cada que la propiedad search cambia
