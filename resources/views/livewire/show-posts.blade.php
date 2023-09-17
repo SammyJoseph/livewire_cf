@@ -160,6 +160,7 @@
                     </tbody>
                 </table>
 
+                {{-- Paginación --}}
                 @if (method_exists($posts, 'hasPages') && $posts->hasPages())
                     <div class="px-6 py-3">
                         {{ $posts->links() }}

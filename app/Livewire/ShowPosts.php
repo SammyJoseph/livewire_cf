@@ -118,7 +118,7 @@ class ShowPosts extends Component
         $this->reset(['openEditModal', 'epost']);
     }
 
-    function destroy()
+    public function destroy()
     {
         $post = Post::find($this->dpost->id); // encuentra al post
         Storage::delete([$post->image]); // elimina la imagen de la carpeta
@@ -126,5 +126,10 @@ class ShowPosts extends Component
         
         $this->isOpenDeleteToast = true; // mostrar toast de confirmación
         $this->reset(['openDeleteModal', 'dpost']);
+    }
+
+    public function clearToasts()
+    {
+        $this->reset(['isOpenEditToast', 'isOpenDeleteToast']);
     }
 }

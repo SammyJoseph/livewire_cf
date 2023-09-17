@@ -46,4 +46,9 @@ class CreatePost extends Component
         $this->reset(['title', 'content', 'image', 'isOpenModal']);
         $this->dispatch('resetFileInput'); // resetea el nombre de archivo seleccionado anteriormente (se escucha desde la vista con js)
     }
+
+    public function clearToasts()
+    {
+        $this->reset(['isOpenToast']);
+    }
 }
