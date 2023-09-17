@@ -118,7 +118,7 @@
                                     {{ $post->title }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ $post->content }}
+                                    {!! $post->content !!}
                                 </td>
                                 <td class="px-6 h-40">
                                     <img class="object-contain max-h-full" src="{{ Storage::url($post->image) }}" alt="">

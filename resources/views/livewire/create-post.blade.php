@@ -26,7 +26,7 @@
                     <div class="px-6 py-6 lg:px-8">
                         <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Crear nuevo post</h3>
                         <form class="space-y-6" action="#">
-                            <div>
+                            <div> {{-- título --}}
                                 <label for="title"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Título</label>
                                 <input type="text" name="title" id="title" wire:model="title"
@@ -36,12 +36,14 @@
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="my-4">
-                                <label for="message"
+                            <div class="my-4"> {{-- Contenido --}}
+                                <label for="ckeditor"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contenido</label>
-                                <textarea id="message" rows="4" required wire:model="content"
-                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Escribe el contenido del nuevo post"></textarea>
+                                <div wire:ignore>
+                                    <textarea id="ckeditor" rows="4" wire:model="content" name="ckeditor"
+                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                        placeholder="Escribe el contenido del nuevo post"></textarea>
+                                </div>
                                 @error('content')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
@@ -118,4 +120,20 @@
             </button>
         </div>
     </div>
+
+    @push('js')
+        <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script>
+        <script>
+            ClassicEditor
+                .create( document.querySelector( '#ckeditor' ) )
+                .then( function(ckeditor){ // sincronizar variable $content con el contenido del textarea ckeditor
+                    ckeditor.model.document.on('change:data', () => {
+                        @this.set('content', ckeditor.getData())
+                    })
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+        </script>        
+    @endpush
 </div>
