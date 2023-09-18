@@ -14,6 +14,10 @@ class CreatePost extends Component
     public $isOpenModal = false;
     public $isOpenToast = false;
 
+    protected $listeners = [
+        'resetCreateToast'  => 'clearToasts',
+    ];
+
     public function render()
     {
         return view('livewire.create-post');
@@ -38,6 +42,7 @@ class CreatePost extends Component
 
         $this->clearForm();
         $this->dispatch('postCreated'); // evento escuchado desde ShowPosts
+        $this->dispatch('resetToasts');
         $this->isOpenToast = true;
     }
 

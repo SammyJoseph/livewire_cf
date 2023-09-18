@@ -13,8 +13,9 @@ class ShowPosts extends Component
 {
     use WithFileUploads, WithPagination;
 
-    protected $listeners = [ // eventos enviados desde CreatePost & EditPost
-        'postCreated'       => 'render',
+    protected $listeners = [ // eventos enviados desde CreatePost
+        'postCreated'   => 'render',
+        'resetToasts'   => 'clearToasts',
     ];
 
     public $openEditModal = false, $openDeleteModal = false, $title, $content, $image;
@@ -34,7 +35,7 @@ class ShowPosts extends Component
 
     public function render()
     {
-        if ($this->readyToLoad) {
+        if ($this->readyToLoad) { // usando lazy load
             $postsQuery = Post::where('title', 'like', '%' . $this->search . '%')
                         ->orWhere('content', 'like', '%' . $this->search . '%')
                         ->orderBy($this->sort, $this->dir);   
@@ -83,6 +84,8 @@ class ShowPosts extends Component
         $this->content = $post->content;
         $this->image = $post->image;
         $this->openEditModal = true;
+
+        $this->dispatch('loadCKEditor');
     }
 
     public function deleteModal(Post $post)
@@ -114,6 +117,8 @@ class ShowPosts extends Component
             'image'       => $img,
         ]);
 
+        $this->clearToasts();
+        $this->dispatch('resetCreateToast');
         $this->isOpenEditToast = true; // mostrar toast de confirmación
         $this->reset(['openEditModal', 'epost']);
     }
@@ -124,6 +129,8 @@ class ShowPosts extends Component
         Storage::delete([$post->image]); // elimina la imagen de la carpeta
         $post->delete();
         
+        $this->clearToasts();
+        $this->dispatch('resetCreateToast');
         $this->isOpenDeleteToast = true; // mostrar toast de confirmación
         $this->reset(['openDeleteModal', 'dpost']);
     }
@@ -131,5 +138,10 @@ class ShowPosts extends Component
     public function clearToasts()
     {
         $this->reset(['isOpenEditToast', 'isOpenDeleteToast']);
+    }
+
+    public function resetEPost()
+    {
+        $this->reset(['epost']);
     }
 }

@@ -168,7 +168,6 @@
                 @endif
             @else
                 {{-- <div class="text-xs text-white uppercase bg-blue-600 mt-4 p-4">No se encontraron resultados</div> --}}      
-                
                 {{-- lazy load table --}}
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table class="w-full text-sm text-left text-blue-100 dark:text-blue-100 mt-4">
@@ -222,10 +221,29 @@
     @endif
 
     {{-- Delete post - Modal --}}
-    @if ($dpost) {{-- $epost es el Post enviado al dar clic en el botón eliminar de cada post --}}
+    @if ($dpost) {{-- $dpost es el Post enviado al dar clic en el botón eliminar de cada post --}}
         @component('components.posts.delete-post-form') @endcomponent
     @endif
 
     {{-- Confirmation toasts --}}
     @include('_partials.toasts')
+
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            @this.on('loadCKEditor', (event) => {
+                setTimeout(() => {
+                    ClassicEditor
+                        .create( document.querySelector( '#ckeditor_e' ) )
+                        .then( function(ckeditor_e){ // sincronizar variable $content con el contenido del textarea ckeditor_e
+                            ckeditor_e.model.document.on('change:data', () => {
+                                @this.set('content', ckeditor_e.getData())
+                            })
+                        } )
+                        .catch( error => {
+                            console.error( error );
+                        } );
+                }, 100);
+            });
+        });
+    </script>  
 </div>
